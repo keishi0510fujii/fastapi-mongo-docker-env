@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api/app:/opt/app
+    tty: true
+    privileged: true
+    image: fastapi
+    container_name: fastapi_backend
+    ports:
+      - "8001:8000"
+
+  mongo:
+    image: mongo
+    container_name: fastapi_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/data/db:/data/db
+    depends_on:
+      - api
